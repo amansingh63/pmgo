@@ -46,15 +46,14 @@ import (
 )
 
 var (
-	app     = kingpin.New("pmgo", "Aguia Process Manager.")
-	dns     = app.Flag("dns", "TCP Dns host.").Default(":9876").String()
-	timeout = 30 * time.Second
+	app             = kingpin.New("pmgo", "Aguia Process Manager.")
+	serveConfigFile = app.Flag("config-file", "Config file location").String()
+	dns             = app.Flag("dns", "TCP Dns host.").Default(":9876").String()
+	timeout         = 30 * time.Second
 
-	serveStop           = app.Command("kill", "Kill daemon pmgo.")
-	serveStopConfigFile = serveStop.Flag("config-file", "Config file location").String()
+	serveStop = app.Command("kill", "Kill daemon pmgo.")
 
-	serve           = app.Command("serve", "Create pmgo daemon.")
-	serveConfigFile = serve.Flag("config-file", "Config file location").String()
+	serve = app.Command("serve", "Create pmgo daemon.")
 
 	resurrect = app.Command("resurrect", "Resurrect all previously save processes.")
 
@@ -63,6 +62,7 @@ var (
 	startName       = start.Arg("name", "Process name.").Required().String()
 	binFile         = start.Arg("binary", "compiled golang file").Bool()
 	startKeepAlive  = true
+	startCwd        = start.Flag("cwd", "Change the working directory").String()
 	startArgs       = start.Flag("args", "External args.").Strings()
 
 	restart     = app.Command("restart", "Restart a process.")
@@ -100,7 +100,7 @@ func main() {
 	case start.FullCommand():
 		checkRemoteMasterServer()
 		cli := cli.InitCli(*dns, timeout)
-		cli.StartGoBin(*startSourcePath, *startName, startKeepAlive, *startArgs, *binFile)
+		cli.StartGoBin(*startSourcePath, *startName, startKeepAlive, *startArgs, *startCwd, *binFile)
 		cli.Status()
 	case restart.FullCommand():
 		checkRemoteMasterServer()
