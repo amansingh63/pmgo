@@ -153,8 +153,13 @@ func getCtx() *daemon.Context {
 		return ctx
 	}
 	if *serveConfigFile == "" {
-		folderPath := os.Getenv("HOME")
-		*serveConfigFile = folderPath + "/.pmgo/config.toml"
+		configFile := os.Getenv("PMGO_CONFIG_FILE")
+		if configFile != "" {
+			*serveConfigFile = configFile
+		} else {
+			folderPath := os.Getenv("HOME")
+			*serveConfigFile = folderPath + "/.pmgo/config.toml"
+		}
 	}
 
 	dir := path.Dir(*serveConfigFile)
