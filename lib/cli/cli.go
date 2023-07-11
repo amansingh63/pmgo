@@ -55,8 +55,8 @@ func (cli *Cli) Logs(name string, follow bool) {
 
 func (cli *Cli) getLogs(userDirectory, name string) {
 	files := []string{
-		fmt.Sprintf("%s/.pmgo/%s/logserver.err", userDirectory, name),
-		fmt.Sprintf("%s/.pmgo/%s/logserver.out", userDirectory, name),
+		fmt.Sprintf("%s/.pmgo/%s/%s.err", userDirectory, name, name),
+		fmt.Sprintf("%s/.pmgo/%s/%s.out", userDirectory, name, name),
 	}
 	for _, file := range files {
 		if _, err := os.Stat(file); err != nil {
@@ -77,8 +77,8 @@ func (cli *Cli) getLogs(userDirectory, name string) {
 
 func (cli *Cli) followLogs(userDirectory, name string) {
 	files := []string{
-		fmt.Sprintf("%s/.pmgo/%s/logserver.err", userDirectory, name),
-		fmt.Sprintf("%s/.pmgo/%s/logserver.out", userDirectory, name),
+		fmt.Sprintf("%s/.pmgo/%s/%s.err", userDirectory, name, name),
+		fmt.Sprintf("%s/.pmgo/%s/%s.out", userDirectory, name, name),
 	}
 	var wg sync.WaitGroup
 	for _, file := range files {
